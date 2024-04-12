@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Dígito PIS</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.resultado {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+}
+
+.copiar {
+    display: inline-block;
+    background-color: transparent;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.copiar:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+<script>
+function calcularDigitoModulo11(numero) {
+    var soma = 0;
+    var multiplicador = 2;
+
+    for (var i = numero.length - 1; i >= 0; i--) {
+        soma += parseInt(numero.charAt(i)) * multiplicador;
+        multiplicador++;
+        if (multiplicador > 9) {
+            multiplicador = 2;
+        }
+    }
+
+    var resto = soma % 11;
+    var digitoVerificador;
+
+    if (resto == 0 || resto == 1) {
+        digitoVerificador = 0;
+    } else {
+        digitoVerificador = 11 - resto;
+    }
+
+    return digitoVerificador;
+}
+
+function calcularDigito() {
+    var numero = document.getElementById("numero").value;
+    var digito = calcularDigitoModulo11(numero);
+	
+
+    document.getElementById("resultado").innerHTML = "O dígito verificador é: "+ numero + digito;
+}
+
+function copiarNumero() {
+    var numero = document.getElementById("resultado").innerText;
+    var numeros = numero.match(/\d+/g).join('');
+    navigator.clipboard.writeText(numeros).then(function() {
+        alert("Número copiado para a área de transferência!");
+    }, function() {
+        alert("Erro ao copiar o número!");
+    });
+}
+</script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Calculadora de Dígito Verificador Módulo 11</h2>
+
+    <label for="numero">Digite o número:</label><br>
+    <input type="text" id="numero" name="numero"><br>
+
+    <button onclick="calcularDigito()">Calcular Dígito Verificador</button><br>
+    <button class="copiar" onclick="copiarNumero()">Copiar Número</button>
+    <p id="resultado" class="resultado"></p>
+</div>
+
+<div class="footer">
+    <p>Criado pela empresa Deltamac</p>
+</div>
+
+</body>
+</html>
